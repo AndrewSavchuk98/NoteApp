@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:layout_height="wrap_content"
+                android:maxLines="4"
                 tools:text="Text note app" />
 
             <TextView

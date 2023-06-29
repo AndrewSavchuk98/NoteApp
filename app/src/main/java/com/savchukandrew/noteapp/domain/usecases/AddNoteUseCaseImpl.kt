@@ -2,14 +2,14 @@ package com.savchukandrew.noteapp.domain.usecases
 
 import com.savchukandrew.noteapp.domain.NotesRepository
 import com.savchukandrew.noteapp.domain.models.Note
-import io.reactivex.Flowable
+import io.reactivex.Completable
 import javax.inject.Inject
 
-class GetAllNotesUseCaseImpl @Inject constructor(
+class AddNoteUseCaseImpl @Inject constructor(
     private val repository: NotesRepository
-) : GetAllNotesUseCase {
+) : AddNoteUseCase {
 
-    override operator fun invoke(): Flowable<List<Note>> {
-        return repository.getAllNotes()
+    override fun invoke(note: Note): Completable {
+        return repository.addNote(note)
     }
 }

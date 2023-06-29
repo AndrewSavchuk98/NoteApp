@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.savchukandrew.noteapp.domain.usecases.GetAllNotesUseCase
 import com.savchukandrew.noteapp.presentation.notes.models.NoteUi
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NotesViewModel @Inject constructor(
@@ -18,27 +16,28 @@ class NotesViewModel @Inject constructor(
 
     init {
         //TODO("Fix this problem")
-        getAllNotesUseCase()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it.map { note ->
+        getAllNotesUseCase.invoke()
+            .map { list ->
+                list.map {
                     NoteUi(
-                        id = note.id,
-                        title = note.title,
-                        text = note.text,
-                        date = note.date.toString()
+                        id = it.id,
+                        title = it.title,
+                        text = it.text,
+                        date = it.date.toString()
                     )
                 }
             }
             .subscribe {
-                _state.value?.notes = it
+                val currentState = _state.value ?: NotesUiState()
+                _state.value = currentState.copy(notes = it)
             }
+            .dispose()
+
 
     }
 
 }
 
 data class NotesUiState(
-    var notes: List<NoteUi>
+    var notes: List<NoteUi> = emptyList()
 )

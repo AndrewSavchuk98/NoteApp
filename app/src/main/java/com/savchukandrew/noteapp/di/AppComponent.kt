@@ -5,6 +5,7 @@ import com.savchukandrew.noteapp.presentation.note.NoteFragment
 import com.savchukandrew.noteapp.presentation.notes.NoteListFragment
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
 @Component(
     modules = [AppModule::class,
@@ -13,6 +14,7 @@ import dagger.Component
         MapperModule::class,
         UseCasesModule::class]
 )
+@Singleton
 interface AppComponent {
 
     fun inject(fragment: NoteListFragment)

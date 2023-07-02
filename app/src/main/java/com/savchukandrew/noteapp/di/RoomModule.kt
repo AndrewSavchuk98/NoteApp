@@ -6,12 +6,14 @@ import com.savchukandrew.noteapp.data.local.NotesDAO
 import com.savchukandrew.noteapp.data.local.NotesRoomDatabase
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 
 @Module
 class RoomModule{
 
     @Provides
+    @Singleton
     fun provideRoomDataBase(context: Context) =
         Room.databaseBuilder(
             context,
@@ -20,6 +22,7 @@ class RoomModule{
         ).build()
 
     @Provides
+    @Singleton
     fun provideNotesDao(database: NotesRoomDatabase): NotesDAO {
         return database.getNoteDao()
     }

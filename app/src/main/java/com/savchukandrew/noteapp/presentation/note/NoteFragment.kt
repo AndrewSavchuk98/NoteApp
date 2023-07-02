@@ -1,25 +1,25 @@
-package com.savchukandrew.noteapp.presentation.notes
+package com.savchukandrew.noteapp.presentation.note
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.savchukandrew.noteapp.NoteApp
 import com.savchukandrew.noteapp.R
 import com.savchukandrew.noteapp.core.appComponent
-import com.savchukandrew.noteapp.databinding.FragmentNotesListBinding
+import com.savchukandrew.noteapp.databinding.FragmentNoteBinding
+import com.savchukandrew.noteapp.domain.models.Note
 import com.savchukandrew.noteapp.presentation.navigator
-import com.savchukandrew.noteapp.presentation.notes.adapters.NotesAdapter
+import com.savchukandrew.noteapp.presentation.notes.NotesViewModel
 import javax.inject.Inject
 
-class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
+class NoteFragment : Fragment(R.layout.fragment_note) {
 
-    private var _binding: FragmentNotesListBinding? = null
+    private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
+
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -27,6 +27,7 @@ class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
     private val viewModel by viewModels<NotesViewModel> {
         factory
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,26 +39,39 @@ class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotesListBinding.inflate(inflater, container, false)
+        _binding = FragmentNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = NotesAdapter()
-        binding.recycler.adapter = adapter
-        viewModel.state.observe(viewLifecycleOwner) {
-            adapter.submitList(it.notes)
-            Log.d("MainActivity", "List is ${it.notes}")
-        }
+        val title = binding.titleEditText.text
+        val text = binding.contentEditText.text
+        val date = binding.dateTextView.text
         binding.addNoteButton.setOnClickListener {
-            navigator().goToAddNote()
+            viewModel.addNote(
+                Note(
+                    id = 0,
+                    title = title.toString(),
+                    text = text.toString(),
+                    date = "March 4"
+                )
+            )
+            navigator().goBack()
         }
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun newInstance(): NoteFragment {
+            val args = Bundle()
+            val fragment = NoteFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

@@ -17,11 +17,6 @@ interface DataModule {
     @Binds
     fun bindNotesDataSource(notesDataSource: RoomNotesDataSource): NotesDataSource
 
-    @Binds
-    fun bindGetAllNotesUseCase(useCase: GetAllNotesUseCaseImpl): GetAllNotesUseCase
-
-    @Binds
-    fun bindAddNotesUseCase(useCase: AddNoteUseCaseImpl): AddNoteUseCase
 
     @Binds
     fun bindNotesRepository(notesRepositoryImpl: NotesRepositoryImpl): NotesRepository

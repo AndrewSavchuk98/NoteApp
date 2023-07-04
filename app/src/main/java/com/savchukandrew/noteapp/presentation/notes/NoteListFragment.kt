@@ -1,14 +1,12 @@
 package com.savchukandrew.noteapp.presentation.notes
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.savchukandrew.noteapp.NoteApp
 import com.savchukandrew.noteapp.R
 import com.savchukandrew.noteapp.core.appComponent
 import com.savchukandrew.noteapp.databinding.FragmentNotesListBinding
@@ -48,7 +46,6 @@ class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
         binding.recycler.adapter = adapter
         viewModel.state.observe(viewLifecycleOwner) {
             adapter.submitList(it.notes)
-            Log.d("MainActivity", "List is ${it.notes}")
         }
         binding.addNoteButton.setOnClickListener {
             navigator().goToAddNote()

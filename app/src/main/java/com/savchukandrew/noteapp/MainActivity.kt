@@ -24,6 +24,6 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun goBack() {
-        onBackPressed()
+        supportFragmentManager.popBackStack()
     }
 }

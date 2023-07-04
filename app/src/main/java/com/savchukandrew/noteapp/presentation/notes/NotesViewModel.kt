@@ -1,6 +1,5 @@
 package com.savchukandrew.noteapp.presentation.notes
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +23,6 @@ class NotesViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        //TODO("Fix this problem")
         val disposable = getAllNotesUseCase.invoke()
             .map { list ->
                 list.map {
@@ -44,10 +42,9 @@ class NotesViewModel @Inject constructor(
 
     }
 
-    fun addNote(note: Note){
+    fun addNote(note: Note) {
         val disposable = addNoteUseCase.invoke(note).subscribe()
         compositeDisposable.add(disposable)
-        Log.d("MainActivity", "Add Called")
     }
 
     override fun onCleared() {

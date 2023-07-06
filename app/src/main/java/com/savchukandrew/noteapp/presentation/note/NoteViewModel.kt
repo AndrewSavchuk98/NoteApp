@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.savchukandrew.noteapp.domain.models.Note
 import com.savchukandrew.noteapp.domain.usecases.AddNoteUseCase
+import com.savchukandrew.noteapp.domain.usecases.DeleteNoteUseCase
 import com.savchukandrew.noteapp.domain.usecases.GetNoteByIdUseCase
 import com.savchukandrew.noteapp.domain.usecases.UpdateNoteUseCase
 import com.savchukandrew.noteapp.presentation.notes.models.NoteUi
@@ -14,7 +15,8 @@ import javax.inject.Inject
 class NoteViewModel @Inject constructor(
     private val addNoteUseCase: AddNoteUseCase,
     private val updateNoteUseCase: UpdateNoteUseCase,
-    private val getNoteByIdUseCase: GetNoteByIdUseCase
+    private val getNoteByIdUseCase: GetNoteByIdUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
 
     private val _note: MutableLiveData<NoteUi> = MutableLiveData()
@@ -58,6 +60,17 @@ class NoteViewModel @Inject constructor(
             date = noteUi.date
         )
         val disposable = updateNoteUseCase(note).subscribe()
+        compositeDisposable.add(disposable)
+    }
+
+    fun deleteNote(noteUi: NoteUi){
+        val note = Note(
+            id = noteUi.id,
+            title = noteUi.title,
+            text = noteUi.text,
+            date = noteUi.date
+        )
+        val disposable = deleteNoteUseCase(note).subscribe()
         compositeDisposable.add(disposable)
     }
 

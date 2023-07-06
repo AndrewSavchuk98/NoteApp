@@ -27,7 +27,12 @@ class NotesViewModelFactory @Inject constructor(
             }
 
             NoteViewModel::class.java -> {
-                NoteViewModel(addNoteUseCase, updateNoteUseCase, getNoteByIdUseCase)
+                NoteViewModel(
+                    addNoteUseCase,
+                    updateNoteUseCase,
+                    getNoteByIdUseCase,
+                    deleteNoteUseCase
+                )
             }
 
             else -> {

@@ -9,16 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.savchukandrew.noteapp.R
 import com.savchukandrew.noteapp.core.appComponent
-import com.savchukandrew.noteapp.core.log
 import com.savchukandrew.noteapp.databinding.FragmentNoteBinding
-import com.savchukandrew.noteapp.domain.models.Note
 import com.savchukandrew.noteapp.presentation.navigator
-import com.savchukandrew.noteapp.presentation.notes.NotesViewModel
 import com.savchukandrew.noteapp.presentation.notes.models.NoteUi
-import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -35,15 +29,13 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         factory
     }
 
-    private var noteId = 0
+    private var currentNoteUi: NoteUi = NoteUi()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent().inject(this)
-        noteId = requireArguments().getInt(EXTRA_NOTE_ID)
+        val noteId = requireArguments().getInt(EXTRA_NOTE_ID)
         viewModel.getNoteByID(noteId)
-        log("OnCreate noteId: $noteId")
-
     }
 
     override fun onCreateView(
@@ -58,7 +50,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.note.observe(viewLifecycleOwner) {
-            Timber.d("NoteUi when observe $it")
+            currentNoteUi = it
             with(binding) {
                 updateUI(it)
             }
@@ -72,20 +64,18 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         binding.dateTextView.text = formattedDate
 
         binding.addNoteButton.setOnClickListener {
-            log("OnClick noteId: $noteId")
-            val noteUi = NoteUi(
-                id = noteId,
-                title = title.toString(),
-                text = text.toString(),
-                date = formattedDate.toString()
-            )
-
-            log("NoteUi in OnClick $noteUi")
-            if (noteId != 0) {
-                log("Update called")
-                viewModel.updateNote(noteUi)
+            if (currentNoteUi.id != 0) {
+                val copyNote = currentNoteUi.copy(
+                    text = binding.contentEditText.text.toString(),
+                    title = binding.titleEditText.text.toString()
+                )
+                viewModel.updateNote(copyNote)
             } else {
-                log("Add called")
+                val noteUi = NoteUi(
+                    title = title.toString(),
+                    text = text.toString(),
+                    date = formattedDate.toString()
+                )
                 viewModel.addNote(noteUi)
             }
             navigator().goBack()
@@ -97,8 +87,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         _binding = null
     }
 
-    private fun FragmentNoteBinding.updateUI(noteUi: NoteUi) {
-        //  noteId = noteUi.id
+    private fun updateUI(noteUi: NoteUi) {
         binding.titleEditText.setText(noteUi.title)
         binding.contentEditText.setText(noteUi.text)
         binding.dateTextView.text = noteUi.date

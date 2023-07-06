@@ -2,7 +2,7 @@ package com.savchukandrew.noteapp.presentation.notes.models
 
 data class NoteUi(
     val id: Int = 0,
-    val title: String,
-    val text: String,
-    val date: String
+    val title: String = "",
+    var text: String = "",
+    val date: String = ""
 )

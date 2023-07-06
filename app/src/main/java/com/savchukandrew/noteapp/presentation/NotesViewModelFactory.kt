@@ -23,7 +23,7 @@ class NotesViewModelFactory @Inject constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val viewModel = when (modelClass) {
             NotesViewModel::class.java -> {
-                NotesViewModel(getAllNotesUseCase, addNoteUseCase, deleteNoteUseCase)
+                NotesViewModel(getAllNotesUseCase)
             }
 
             NoteViewModel::class.java -> {

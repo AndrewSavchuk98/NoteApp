@@ -14,7 +14,7 @@ import com.savchukandrew.noteapp.presentation.navigator
 import com.savchukandrew.noteapp.presentation.notes.adapters.NotesAdapter
 import javax.inject.Inject
 
-class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
+class NoteListFragment : Fragment(R.layout.fragment_notes_list), NotesAdapter.OnNoteClickListener {
 
     private var _binding: FragmentNotesListBinding? = null
     private val binding get() = _binding!!
@@ -42,13 +42,13 @@ class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = NotesAdapter()
+        val adapter = NotesAdapter(this)
         binding.recycler.adapter = adapter
         viewModel.state.observe(viewLifecycleOwner) {
             adapter.submitList(it.notes)
         }
         binding.addNoteButton.setOnClickListener {
-            navigator().goToAddNote()
+            navigator().goToAddNote(null)
         }
 
     }
@@ -56,5 +56,9 @@ class NoteListFragment : Fragment(R.layout.fragment_notes_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onNoteClick(noteId: Int) {
+        navigator().goToAddNote(noteId)
     }
 }

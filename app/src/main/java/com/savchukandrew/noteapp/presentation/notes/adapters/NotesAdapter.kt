@@ -10,7 +10,13 @@ import com.savchukandrew.noteapp.databinding.NoteItemBinding
 import com.savchukandrew.noteapp.presentation.notes.models.NoteUi
 import kotlin.random.Random
 
-class NotesAdapter : ListAdapter<NoteUi, NotesAdapter.NotesViewHolder>(NotesDiffUtils) {
+class NotesAdapter(
+    private val listener: OnNoteClickListener
+) : ListAdapter<NoteUi, NotesAdapter.NotesViewHolder>(NotesDiffUtils) {
+
+    interface OnNoteClickListener {
+        fun onNoteClick(noteId: Int)
+    }
 
     class NotesViewHolder(private val binding: NoteItemBinding) : ViewHolder(binding.root) {
 
@@ -40,6 +46,9 @@ class NotesAdapter : ListAdapter<NoteUi, NotesAdapter.NotesViewHolder>(NotesDiff
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         holder.bind(currentList[position])
+        holder.itemView.setOnClickListener {
+            listener.onNoteClick(currentList[position].id)
+        }
     }
 }
 

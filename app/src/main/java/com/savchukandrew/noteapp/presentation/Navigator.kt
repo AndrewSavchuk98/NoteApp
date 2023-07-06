@@ -5,7 +5,7 @@ import com.savchukandrew.noteapp.MainActivity
 
 interface Navigator {
 
-    fun goToAddNote()
+    fun goToAddNote(noteId: Int?)
 
     fun goBack()
 }

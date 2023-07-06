@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity(), Navigator {
             .commit()
     }
 
-    override fun goToAddNote() {
+    override fun goToAddNote(noteId: Int?) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, NoteFragment.newInstance())
+            .replace(R.id.fragmentContainer, NoteFragment.newInstance(noteId))
             .addToBackStack(null)
             .commit()
     }

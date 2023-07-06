@@ -11,30 +11,29 @@ import com.savchukandrew.noteapp.presentation.note.NoteViewModel
 import com.savchukandrew.noteapp.presentation.notes.NotesViewModel
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST")
 class NotesViewModelFactory @Inject constructor(
     private val getAllNotesUseCase: GetAllNotesUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
     private val addNoteUseCase: AddNoteUseCase,
     private val getNoteByIdUseCase: GetNoteByIdUseCase,
     private val updateNoteUseCase: UpdateNoteUseCase
-
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val viewModel = when (modelClass) {
             NotesViewModel::class.java -> {
-                NotesViewModel(getAllNotesUseCase,addNoteUseCase, deleteNoteUseCase)
+                NotesViewModel(getAllNotesUseCase, addNoteUseCase, deleteNoteUseCase)
             }
 
             NoteViewModel::class.java -> {
-                NoteViewModel(addNoteUseCase)
+                NoteViewModel(addNoteUseCase, updateNoteUseCase, getNoteByIdUseCase)
             }
 
             else -> {
                 super.create(modelClass)
             }
         }
-
         return viewModel as T
     }
 }

@@ -88,9 +88,11 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     }
 
     private fun updateUI(noteUi: NoteUi) {
-        binding.titleEditText.setText(noteUi.title)
-        binding.contentEditText.setText(noteUi.text)
-        binding.dateTextView.text = noteUi.date
+        with(binding) {
+            contentEditText.setText(noteUi.text)
+            titleEditText.setText(noteUi.title)
+            dateTextView.text = noteUi.date
+        }
     }
 
     companion object {

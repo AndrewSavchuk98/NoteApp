@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.savchukandrew.noteapp.R
 import com.savchukandrew.noteapp.core.appComponent
 import com.savchukandrew.noteapp.databinding.FragmentNoteBinding
+import com.savchukandrew.noteapp.presentation.CustomAction
+import com.savchukandrew.noteapp.presentation.HasCustomAction
 import com.savchukandrew.noteapp.presentation.navigator
 import com.savchukandrew.noteapp.presentation.notes.models.NoteUi
 import java.text.SimpleDateFormat
@@ -17,7 +19,7 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class NoteFragment : Fragment(R.layout.fragment_note) {
+class NoteFragment : Fragment(R.layout.fragment_note), HasCustomAction {
 
     private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
@@ -28,7 +30,6 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     private val viewModel by viewModels<NoteViewModel> {
         factory
     }
-
     private var currentNoteUi: NoteUi = NoteUi()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +52,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.note.observe(viewLifecycleOwner) {
             currentNoteUi = it
-            with(binding) {
-                updateUI(it)
-            }
+            updateUI(it)
         }
 
         val title = binding.titleEditText.text
@@ -107,5 +106,19 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    override fun getDeleteAction(): CustomAction {
+        return CustomAction(
+            R.drawable.round_delete_24,
+            R.string.delete
+        ) {
+            viewModel.deleteNote(currentNoteUi)
+            navigator().goBack()
+        }
+    }
+
+    override fun getChangeNoteBackground(): CustomAction {
+        TODO("Not yet implemented")
     }
 }

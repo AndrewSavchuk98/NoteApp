@@ -3,4 +3,5 @@
     <string name="add_notes">Add notes</string>
     <string name="title">Title</string>
     <string name="start_texting">Start texting</string>
+    <string name="delete">Delete</string>
 </resources>
